@@ -1,0 +1,29 @@
+name: Docker
+
+on:
+  push:
+    branches:
+    - main
+    - experimental
+  pull_request:
+    branches:
+    - main
+    - experimental
+
+
+jobs:
+  docker:
+    name: Build Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cancel previous
+        uses: styfle/cancel-workflow-action@0.7.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Build Docker Image
+        run: docker build -t envs . -f ./builders/service.dockerfile
